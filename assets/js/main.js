@@ -271,9 +271,43 @@
   new PureCounter();
 })();
 function click() {
-  localStorage.setItem("name", document.getElementById("nome").value)
-  localStorage.setItem("email", document.getElementById("email").value)
-  localStorage.setItem("subject", document.getElementById("end").value)
-  localStorage.setItem("cidade", document.getElementById("cidade").value)
-    
+  localStorage.setItem("name", document.getElementById("nome").value);
+  localStorage.setItem("email", document.getElementById("email").value);
+  localStorage.setItem("subject", document.getElementById("end").value);
+  localStorage.setItem("cidade", document.getElementById("cidade").value);
+}
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "seu-email@gmail.com", // substitua pelo seu email
+    pass: "sua-senha", // substitua pela sua senha
+  },
+});
+
+function enviarEmail(nome, email, assunto) {
+  const mailOptions = {
+    from: "fernandorgoncalves@hotmail.com",
+    to: email,
+    subject: assunto,
+    text: `Olá ${nome},\n\nObrigado por entrar em contato conosco! Responderemos assim que possível.\n\nAtenciosamente,\nSua equipe.`,
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("E-mail enviado: " + info.response);
+    }
+  });
+}
+
+function enviar() {
+  const nome = document.getElementById("nome").value;
+  const email = document.getElementById("email").value;
+  const assunto = document.getElementById("assunto").value;
+
+  enviarEmail(nome, email, assunto);
+  window.location.reload(false);
 }
